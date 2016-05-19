@@ -1,0 +1,2 @@
+#!/bin/sh
+logger "cron job worked! not..."

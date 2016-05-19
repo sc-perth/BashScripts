@@ -1,0 +1,57 @@
+#!/bin/bash
+function getUsers {
+    local OUT=
+    for i in $(users); do
+	if [ $i in $OUT ]; then
+	else
+	    OUT=$OUT,$i
+	fi
+    done
+    return $OUT
+}
+
+
+#if/else/else if logic
+if [ "foo" = "foo" ]; then
+    echo expression evaluated as true
+else if [ "bar" = "bar" ]; then
+    echo bar
+    fi
+else
+    echo expression evaluated as false
+fi
+
+#for loops
+for i in $( ls ); do
+    echo item: $i
+done
+
+for i in 'seq 1 10';
+do
+    echo $i
+done
+
+#while loops
+COUNTER=0
+while [ $COUNTER -lt 10 ]; do
+    echo The counter is $COUNTER
+    let COUNTER=COUNTER+1
+done
+
+#until loops
+COUNTER=20
+until [ $COUNTER -lt 10 ]; do
+    echo COUNTER $COUNTER
+    let COUNTER-=1
+done
+
+#function example
+function quit {
+    exit
+}
+function e {
+    echo $1
+}
+e Hello
+e World
+quit
