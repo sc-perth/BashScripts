@@ -9,10 +9,10 @@ mailTo=0; mailFrom=0; mailSubj=0; mailBody=0
 while getopts "f:t:s:i:" opt; do
     case $opt in
         f)
-            mailTo="$OPTARG"
+            mailFrom="$OPTARG"
           ;;
         t)
-            mailFrom="$OPTARG"
+            mailTo="$OPTARG"
           ;;
         s)
             mailSubj="$OPTARG"
