@@ -74,6 +74,7 @@ alias lst='ls -laht | grep """`date "+%b %d"`"""'
 alias die='sudo shutdown -h now'
 alias lassh='ssh -l user -o "UserKnownHostsFile /dev/null"'
 alias fixGPGagent='killall ssh-agent gpg-agent > /dev/null >&2; eval $(gpg-agent --daemon)'
+alias not-commented="egrep -v '^(#.*|\s?)$' "
 
 # Provides access to logtail function
 source ~/bashScripts/logtail.sh
