@@ -3,11 +3,11 @@
 Various Bash scripts that I (probably) made &amp; use
 
 **Table of Contents**
-- [Scripts](#Scripts)
+- [Scripts](#scripts)
 	- [colors.sh](#colorssh)
 	- [cron-audit.sh](#cron-auditsh)
 	- [cron_sendmail.sh](#cron_sendmailsh)
-	- [letsencrypt_cron_FreeBSD.sh](#letsencrypt_cron_Freebsdsh)
+	- [letsencrypt_cron_FreeBSD.sh](#letsencrypt_cron_freebsdsh)
 	- [letsencrypt_cron.sh](#letsencrypt_cronsh)
 	- [logtail.sh](#logtailsh)
 	- [monitorUsers.sh](#monitoruserssh)
