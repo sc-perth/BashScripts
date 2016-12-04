@@ -7,12 +7,12 @@ Various Bash scripts that I (probably) made &amp; use
 	- [colors.sh](#colorssh)
 	- [cron-audit.sh](#cron-auditsh)
 	- [cron_sendmail.sh](#cron_sendmailsh)
-	- [letsencrypt_cron_FreeBSD.sh](#letsencrypt_cron_FreeBSDsh)
+	- [letsencrypt_cron_FreeBSD.sh](#letsencrypt_cron_Freebsdsh)
 	- [letsencrypt_cron.sh](#letsencrypt_cronsh)
 	- [logtail.sh](#logtailsh)
-	- [monitorUsers.sh](#monitorUserssh)
-	- [MovieCollectionFunctions.sh](#MovieCollectionFunctionssh)
-	- [PingCheck.sh](#PingChecksh)
+	- [monitorUsers.sh](#monitoruserssh)
+	- [MovieCollectionFunctions.sh](#moviecollectionfunctionssh)
+	- [PingCheck.sh](#pingchecksh)
 	- [template.sh](#templatesh)
 
 ## Scripts
