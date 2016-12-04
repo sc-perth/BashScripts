@@ -50,7 +50,7 @@ _logtail() {
   # Build array of literal paths to all files under _logtail_logDir we want to watch
   # Glob expansion happens here
   declare -a generated
-  for ((i=0; $i<${#include_arr}; ++i)); do
+  for ((i=0; $i<${#include_arr[@]}; ++i)); do
     generated+=(${_logtail_logDir}/${include_arr[$i]})
   done
   _logtail-debug $LINENO generated[@]="`echo ${generated[@]}`"
@@ -58,8 +58,8 @@ _logtail() {
   # Check that each element of the array is a text type file,
   #> drop files that are empty or not text
   declare -a filtered
-  for ((i=0; $i<${#generated}; ++i)); do
-    _logtail-debug $LINENO "i=${i} / #generated=${#generated}"
+  for ((i=0; $i<${#generated[@]}; ++i)); do
+    _logtail-debug $LINENO "i=${i} / #generated=${#generated[@]}"
     _logtail-debug $LINENO "file ${generated[$i]}=`file ${generated[$i]}`"
     file "${generated[$i]}" | grep text 1>&2 > /dev/null
     [ $? -eq 0 ] && filtered+=("${generated[$i]}")
@@ -74,7 +74,6 @@ _logtail() {
   unset _logtail_yellow _logtail_blue _logtail_magenta
   unset _logtail_cyan _logtail_white _logtail_resetColor
   unset include_arr generated filtered
-
 }
 
 ############################################################## END DECLARATIONS
