@@ -3,11 +3,26 @@
 ### ###########################################################################
 ### CONFIG -- USER SETABLE
 
-# Directory that will be prepended to values in include
-logDir="/var/log"
+_logtail-config() {
+  # Directory that will be prepended to values in _logtail_include
+  _logtail_logDir="/var/log"
 
-# globs/Files that will be simultaneously tailed
-declare -a include=("*log" "debug" "dmesg" "messages")
+  # globs/Files that will be simultaneously tailed
+  # This is a space deliminated string that will be converted into an array.
+  _logtail_include="*log debug dmesg messages"
+
+  _logtail_black='\E[30m'; _logtail_red='\E[31m'; _logtail_green='\E[32m';
+  _logtail_yellow='\E[33m'; _logtail_blue='\E[34m'; _logtail_magenta='\E[35m';
+  _logtail_cyan='\E[36m'; _logtail_white='\E[37m'; _logtail_resetColor="tput sgr0"
+
+  _logtail-debug $LINENO logDir="`echo ${_logtail_logDir}`"
+  _logtail-debug $LINENO include="`echo ${_logtail_include}`"
+
+  export _logtail_logDir _logtail_include
+  export _logtail_black _logtail_red _logtail_green
+  export _logtail_yellow _logtail_blue _logtail_magenta
+  export _logtail_cyan _logtail_white _logtail_resetColor
+}
 
 #################################################################### END CONFIG
 
@@ -15,47 +30,51 @@ declare -a include=("*log" "debug" "dmesg" "messages")
 ### ###########################################################################
 ### DECLARATIONS
 
-black='\E[30m'; red='\E[31m'; green='\E[32m'; yellow='\E[33m';
-blue='\E[34m'; magenta='\E[35m'; cyan='\E[36m'; white='\E[37m';
-resetColor="tput sgr0"
-
-# 0 = ON
-debugSwitch=0
-
 _logtail-debug() {
   [ $debugSwitch -eq 0 ] || return
 
-  printf "${yellow}[DEBUG]${green} %s:%s:%d: " "$0" "$BASH_SOURCE" "$1"
-  $resetColor
+  printf "${_logtail_yellow}[DEBUG]${_logtail_green} %s:%s:%d: " "$0" "$BASH_SOURCE" "$1"
+  $_logtail_resetColor
   printf "\'%s\'\n" "$2"
 }
 
 _logtail() {
-  # Build array of literal paths to all files under logDir we want to watch
+  _logtail-config
+  _logtail-debug $LINENO logDir="`echo ${_logtail_logDir}`"
+  _logtail-debug $LINENO include="`echo ${_logtail_include}`"
+  
+  # Convert _logtail_include string to array
+  include_arr=(`echo ${_logtail_include}`)
+  _logtail-debug $LINENO include_arr[@]="`echo ${include_arr[@]}`"
+  
+  # Build array of literal paths to all files under _logtail_logDir we want to watch
   # Glob expansion happens here
   declare -a generated
-  for ((i=0; $i<${#include}; ++i)); do
-    generated+=(${logDir}/${include[$i]})
+  for ((i=0; $i<${#include_arr}; ++i)); do
+    generated+=(${_logtail_logDir}/${include_arr[$i]})
   done
   _logtail-debug $LINENO generated[@]="`echo ${generated[@]}`"
-
-  unset logDir include
 
   # Check that each element of the array is a text type file,
   #> drop files that are empty or not text
   declare -a filtered
   for ((i=0; $i<${#generated}; ++i)); do
+    _logtail-debug $LINENO "i=${i} / #generated=${#generated}"
+    _logtail-debug $LINENO "file ${generated[$i]}=`file ${generated[$i]}`"
     file "${generated[$i]}" | grep text 1>&2 > /dev/null
     [ $? -eq 0 ] && filtered+=("${generated[$i]}")
   done
   _logtail-debug $LINENO filtered[@]="`echo ${filtered[@]}`"
 
-  unset generated
-
   # Watch the list of files that passed tests
   tail -f ${filtered[@]}
 
-unset filtered
+  unset _logtail_logDir _logtail_include
+  unset _logtail_black _logtail_red _logtail_green
+  unset _logtail_yellow _logtail_blue _logtail_magenta
+  unset _logtail_cyan _logtail_white _logtail_resetColor
+  unset include_arr generated filtered
+
 }
 
 ############################################################## END DECLARATIONS
@@ -64,7 +83,8 @@ unset filtered
 ### ###########################################################################
 ### MAIN
 
-debugSwitch=1
+# debugSwitch 0 == ON; 1 == OFF
+debugSwitch=0
 
 _logtail-debug $LINENO "0=\"$0\" 1=\"$1\" 2=\"$2\" @=\"$@\""
 
