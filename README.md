@@ -2,6 +2,18 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/79a1e40577fe40a889267ea50148da63)](https://www.codacy.com/app/perth/BashScripts?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sc-perth/BashScripts&amp;utm_campaign=Badge_Grade)<br/>
 Various Bash scripts that I (probably) made &amp; use
 
+**Table of Contents**
+- [Scripts](#Scripts)
+	- [colors.sh](#colorssh)
+	- [cron-audit.sh](#cron-auditsh)
+	- [cron_sendmail.sh](#cron_sendmailsh)
+	- [letsencrypt_cron_FreeBSD.sh](#letsencrypt_cron_FreeBSDsh)
+	- [letsencrypt_cron.sh](#letsencrypt_cronsh)
+	- [logtail.sh](#logtailsh)
+	- [monitorUsers.sh](#monitorUserssh)
+	- [MovieCollectionFunctions.sh](#MovieCollectionFunctionssh)
+	- [PingCheck.sh](#PingChecksh)
+	- [template.sh](#templatesh)
 
 ## Scripts
 ### colors.sh<br/>
