@@ -67,7 +67,7 @@ _logtail() {
   _logtail-debug $LINENO filtered[@]="$(echo ${filtered[@]})"
 
   # Watch the list of files that passed tests
-  tail -f ${filtered[@]}
+  tail -f ${filtered[@]} | awk '/^==>.*<==/ {print "\033[32m" $0 "\033[00m";next} {print $0}'
 
   unset _logtail_logDir _logtail_include
   unset _logtail_black _logtail_red _logtail_green
@@ -83,7 +83,7 @@ _logtail() {
 ### MAIN
 
 # debugSwitch 0 == ON; 1 == OFF
-debugSwitch=0
+debugSwitch=1
 
 _logtail-debug $LINENO "0=\"$0\" 1=\"$1\" 2=\"$2\" @=\"$@\""
 
