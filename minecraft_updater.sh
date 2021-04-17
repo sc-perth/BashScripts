@@ -10,7 +10,9 @@
 #  ./minecraft-updater.bash [arguments] [version|latest]
 #
 # DEPENDENCIES:
-#   bash, jq, curl, egrep
+#   jq, wget - these might need installed, the rest you probably have
+#   bash, egrep, basename, dirname, chown, chmod, tar w/ gzip, find, printf
+#   
 #
 # ASSUMPTIONS/PREREQUISITS:
 #   This script depends on the version of the MC server .jar being in the
