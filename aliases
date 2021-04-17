@@ -81,96 +81,114 @@ source ~/bashScripts/logtail.sh
 
 function aliass {
 	printf "### %s\n" "$(date)" >> ~/bashScripts/aliases
-	printf "alias %s\n" "$@" >> ~/bashScripts/aliases
-	source ~/.bashrc
+		printf "alias %s\n" "$@" >> ~/bashScripts/aliases
+		source ~/.bashrc
 }
 
 function lsd {
 	OLD=$GREP_COLORS
-	GREP_COLORS="sl=0;44"
-	
-	ls -la | grep -e ^d.\*\$ #| egrep --color=always -e ^.\*[[:space:]][^.]\*\$
-	
-	GREP_COLORS=$OLD
+		GREP_COLORS="sl=0;44"
+
+		ls -la | grep -e ^d.\*\$ #| egrep --color=always -e ^.\*[[:space:]][^.]\*\$
+
+		GREP_COLORS=$OLD
 }
 
 function sddsleep {
 	while [ 1 ]; do
 		sudo hdparm -Y /dev/sdd
-		sleep 60
-	done
+			sleep 60
+			done
 }
 
 function monSize {
 	if [ $# -eq 0 ]; then
 		echo "monSize: FATAL: no target" 1>&2
-		echo "Usage: monSize <sudo> targetDirectory"
-		return 1
-	
-	elif [[ "$1" == "sudo" || "$1" == "Sudo" ]]; then
-		if [[ -a "$2" ]]; then
-			while [ 1 ]; do
-				sudo du -chs "$2"
-				sleep 10
-			done
-		else
-			echo "monSize: FATAL: invalid target" 1>&2
+			echo "Usage: monSize <sudo> targetDirectory"
 			return 1
-		fi
-	elif [[ -a "$1" ]]; then
-		while [ 1 ]; do
-			du -chs "$1"
-			sleep 10
-		done
+
+			elif [[ "$1" == "sudo" || "$1" == "Sudo" ]]; then
+			if [[ -a "$2" ]]; then
+				while [ 1 ]; do
+					sudo du -chs "$2"
+						sleep 10
+						done
+			else
+				echo "monSize: FATAL: invalid target" 1>&2
+					return 1
+					fi
+					elif [[ -a "$1" ]]; then
+					while [ 1 ]; do
+						du -chs "$1"
+							sleep 10
+							done
 	else
 		echo "monSize: FATAL: invalid target" 1>&2
-		return 1
-	fi
+			return 1
+			fi
 }
 
 function contains {
-    local n=$#
-    local value=${!n}
-    for ((i=1;i < $#;i++)) {
-        if [ "${!i}" == "${value}" ]; then
-            return 0
-        fi
-    }
-    return 1
+	local n=$#
+		local value=${!n}
+	for ((i=1;i < $#;i++)) {
+		if [ "${!i}" == "${value}" ]; then
+			return 0
+				fi
+	}
+	return 1
 }
 
 
 function parseFileForUniqueIPs {
 	if [[ -f "$1" && -r "$1" ]]; then
 		declare -a outIParr
-		while read -a line; do
-			local iter=0
-			local count=${#line[@]}
-			while [ $iter -lt $count ]; do
-				Valid_IPv4 ${line[$iter]}
-				if [[ $? -eq 0 ]]; then
-					contains "${outIParr[@]}" "${line[$iter]}"
-					if [[ $? -eq 1 ]]; then
-						outIParr[${#outIParr[@]}]=${line[$iter]}
-					fi
-				fi
-				let iter+=1
-			done
-			#echo ${outIParr[@]}
-			#if [[ ${#outIParr[@]} -gt 20 ]]; then
-			#	echo ${outIParr[@]}
-			#	unset outIParr
-			#	declare -a outIParr
-			#fi
+			while read -a line; do
+				local iter=0
+					local count=${#line[@]}
+	while [ $iter -lt $count ]; do
+		Valid_IPv4 ${line[$iter]}
+	if [[ $? -eq 0 ]]; then
+		contains "${outIParr[@]}" "${line[$iter]}"
+			if [[ $? -eq 1 ]]; then
+				outIParr[${#outIParr[@]}]=${line[$iter]}
+	fi
+		fi
+		let iter+=1
+		done
+#echo ${outIParr[@]}
+#if [[ ${#outIParr[@]} -gt 20 ]]; then
+#	echo ${outIParr[@]}
+#	unset outIParr
+#	declare -a outIParr
+#fi
 		done < "$1"
 		echo ${outIParr[@]}
 	fi
 }
 
 function fix-gpg-agent {
-	killall ssh-agent pgp-agent
+	killall ssh-agent gpg-agent
 	unset GPG_AGENT_INFO SSH_AUTH_SOCK SSH_AGENT_PID
 	eval "$(gpg-agent --daemon --enable-ssh-support)"
+}
+
+function sshWhenUp {
+	while [[ "$(nmap -p 22 $1 | grep -o '1 host up')" != "1 host up" ]]; do
+		printf '%s\n' sleeping
+		sleep 10
+	done
+	ssh $1
+}
+
+function setPassReducedCharSet() {
+	local default='!@#$%&*^_-+'
+	local special=${1:-$default}
+
+	local lower="$(echo {a..z} | sed 's/ //g')"
+	local upper="$(echo {A..Z} | sed 's/ //g')"
+	local num="$(echo {0..9} | sed 's/ //g')"
+	export PASSWORD_STORE_CHARACTER_SET="$(echo ${lower}${upper}${num}${special} | grep -o . | sort | tr -d '\n')"
 }
 
 ##################### USER DEFINED ALIASES  END  HERE ##########################
